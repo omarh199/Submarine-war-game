@@ -73,12 +73,10 @@ class Score {
 }
 
 class MoveSubmarine extends Pane {
-
     private Timeline t1, t2;
     private boolean Move = true;
 
     MoveSubmarine(UserSubmarine s, MyPan mp) {
-
         this.setOnKeyPressed(
                 (KeyEvent e) -> {
                     if (Move) {
@@ -122,6 +120,7 @@ class MoveSubmarine extends Pane {
                             mp.getChildren().remove(nn);
                             ((AutoSubmarines) nn).stopt();
                             Score.setScore(50);
+                            
                         }
                     }
                 }
@@ -293,8 +292,8 @@ class GamePane extends Pane {
                                     x.getChildren().remove(nn);
 
                                 }
-                                if (tries > 10) {
-                                    if (tries == 11) {
+                                if (tries >= 10) {
+                                    if (tries == 10) {
                                         ac = new AudioClip("file:src/Audio/GameOver.mp3");
                                         ac.play();
                                     }
