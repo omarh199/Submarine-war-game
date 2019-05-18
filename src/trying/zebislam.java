@@ -73,10 +73,13 @@ class Score {
 }
 
 class MoveSubmarine extends Pane {
+
     private Timeline t1, t2;
     private boolean Move = true;
+    private ArrayList al;
 
     MoveSubmarine(UserSubmarine s, MyPan mp) {
+        al = new ArrayList();
         this.setOnKeyPressed(
                 (KeyEvent e) -> {
                     if (Move) {
@@ -116,15 +119,17 @@ class MoveSubmarine extends Pane {
                     if (nn instanceof AutoSubmarines) {
                         AutoSubmarines i = ((AutoSubmarines) nn);
                         if (i.getImage().contains(m1.GetPositionX(), m1.GetPositionY())) {
-                            this.getChildren().remove(n);
-                            mp.getChildren().remove(nn);
+                            al.add(m1);
+                            al.add(i);
+
                             ((AutoSubmarines) nn).stopt();
                             Score.setScore(50);
-                            
                         }
                     }
                 }
             }
+            this.getChildren().removeAll(al);
+            mp.getChildren().removeAll(al);
         }));
         t2.setCycleCount(-1);
         t2.play();
@@ -229,7 +234,6 @@ class Missiles extends Pane {
     }
 }
 
-
 class Design extends Pane {
 
     private Rectangle r1, r2;
@@ -254,10 +258,13 @@ class GamePane extends Pane {
     private Timeline tl;
     private int tries = 0;
     private AudioClip ac;
+    private ArrayList al;
+
     GamePane(MyPan mp, UserSubmarine sb, MoveSubmarine msm) {
         h2 = Lives(5);
         t1.setLayoutX(100);
         t1.setLayoutY(100);
+        al = new ArrayList();
         level = new Label("Level: 1");
         score = new Label();
         tl = new Timeline(new KeyFrame(Duration.millis(100),
@@ -278,9 +285,11 @@ class GamePane extends Pane {
                         for (Node nn : x.getChildren()) {
                             if (nn instanceof Rocket) {
                                 Rocket r = (Rocket) nn;
+
                                 if (sb.getImage().contains(r.getX(), r.getY())) {
                                     ac = new AudioClip("file:src/Audio/Explosion_2.mp3");
                                     ac.play();
+                                    al.add(r);
                                     tries++;
                                     for (Node n1 : h2.getChildren()) {
                                         if (tries % 2 == 0) {
@@ -289,11 +298,9 @@ class GamePane extends Pane {
                                             break;
                                         }
                                     }
-                                    x.getChildren().remove(nn);
-
                                 }
-                                if (tries >= 10) {
-                                    if (tries == 10) {
+                                if (tries > 10) {
+                                    if (tries == 11) {
                                         ac = new AudioClip("file:src/Audio/GameOver.mp3");
                                         ac.play();
                                     }
@@ -306,6 +313,7 @@ class GamePane extends Pane {
                                 }
                             }
                         }
+                        x.getChildren().removeAll(al);
                     }
                 }
         ));
@@ -334,42 +342,44 @@ class GamePane extends Pane {
         h2.getChildren().remove(life);
     }
 }
+
 class MainMenu extends Pane {
+
     private ImageView iv;
     private ImageView start;
     private ImageView exit;
     private VBox v;
     private AudioClip ac;
-    MainMenu(Pane p,MoveSubmarine msm,MyPan mp,Stage primaryStage){
-        iv = new ImageView ("file:src/sub.jpeg");
+
+    MainMenu(Pane p, MoveSubmarine msm, MyPan mp, Stage primaryStage) {
+        iv = new ImageView("file:src/sub.jpeg");
         start = new ImageView("file:src/start.png");
         exit = new ImageView("file:src/exit.png");
         ac = new AudioClip("file:src/Audio/Explosion_1.mp3");
         v = new VBox();
-        iv.setFitWidth(700);
         iv.setFitHeight(500);
         start.setFitWidth(200);
-        start.setFitHeight(100);        
+        start.setFitHeight(100);
         exit.setFitWidth(200);
         exit.setFitHeight(100);
         start.setOnMouseClicked(
-        e->{
-            ac.play();
-            this.getChildren().removeAll(iv,v);
-            this.getChildren().add(p);
-            mp.playtimelines();
-            msm.requestFocus();
-                    }
+                e -> {
+                    ac.play();
+                    this.getChildren().removeAll(iv, v);
+                    this.getChildren().add(p);
+                    mp.playtimelines();
+                    msm.requestFocus();
+                }
         );
         exit.setOnMouseClicked(
-        e->{
-            ac.play();
-            primaryStage.close();
-        }
+                e -> {
+                    ac.play();
+                    primaryStage.close();
+                }
         );
         v.setLayoutX(180);
         v.setLayoutY(100);
-        v.getChildren().addAll(start,exit);
-        this.getChildren().addAll(iv,v);
+        v.getChildren().addAll(start, exit);
+        this.getChildren().addAll(iv, v);
     }
 }

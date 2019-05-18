@@ -24,17 +24,17 @@ public class Trying extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Design d = new Design ();
-        UserSubmarine sb = new UserSubmarine ();    
-        MyPan mp = new MyPan(500,500);
-        MoveSubmarine msm = new MoveSubmarine(sb,mp);
-        GamePane gp = new GamePane(mp,sb,msm);
-        
+        Design d = new Design();
+        UserSubmarine sb = new UserSubmarine();
+        MyPan mp = new MyPan(700, 500);
+        MoveSubmarine msm = new MoveSubmarine(sb, mp);
+        GamePane gp = new GamePane(mp, sb, msm);
+
         Pane p = new Pane();
-        p.getChildren().addAll(d,gp,mp,sb,msm);
-        MainMenu m = new MainMenu(p,msm,mp,primaryStage);
+        p.getChildren().addAll(d, gp, mp, sb, msm);
+        MainMenu m = new MainMenu(p, msm, mp, primaryStage);
         Scene s = new Scene(m);
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Submarine War Game");
         primaryStage.setScene(s);
         primaryStage.show();
 //        msm.requestFocus(); 

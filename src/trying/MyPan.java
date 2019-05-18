@@ -6,11 +6,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+
 class MyPan extends Pane {
 
     private double submarinerate = 3000, width, height;
     private Timeline submarinegenerator = new Timeline();
     private AutoSubmarines asm;
+
     public MyPan(double width, double height) {
         this.height = height;
         this.width = width;
@@ -25,12 +27,13 @@ class MyPan extends Pane {
     public void playtimelines() { //produce marines
         submarinegenerator.play();
     }
-    public void stopt(){//stop producing marines
+
+    public void stopt() {//stop producing marines
         submarinegenerator.stop();
     }
-    public void incsubmarinerate(double dec){
-        submarinegenerator.setRate(1+dec);
-        System.out.println(submarinegenerator.getRate());
+
+    public void incsubmarinerate(double dec) {
+        submarinegenerator.setRate(1 + dec);
     }
 }
 
@@ -53,6 +56,11 @@ class AutoSubmarines extends Pane {
         i.setY((Math.random() * (this.height / 2)) + (this.height / 2) - (this.submarineheight));
         this.submarinemotion = new Timeline(new KeyFrame(Duration.millis(this.submarinemotionrate), (e) -> {
             i.setX(i.getX() + this.speed);
+            if (i.getX() >= this.width) {
+                this.stopt();
+                this.getChildren().remove(i);
+            }
+
         }));
         rocketsgenerator = new Timeline(new KeyFrame(Duration.millis(this.rocketsrate), (ee) -> {
             Rocket r = new Rocket(this);
@@ -64,6 +72,7 @@ class AutoSubmarines extends Pane {
         submarinemotion.setCycleCount(-1);
         this.starttimelines();
     }
+
     public double getX() {
         return this.i.getX();
     }
@@ -71,10 +80,11 @@ class AutoSubmarines extends Pane {
     public double getY() {
         return this.i.getY();
     }
-     
-    public ImageView getImage(){
+
+    public ImageView getImage() {
         return this.i;
     }
+
     //any new submarine does not get influence from this methods
     public void starttimelines() { //starts moving of the current submarines
         this.submarinemotion.play();
@@ -85,7 +95,6 @@ class AutoSubmarines extends Pane {
         this.rocketsgenerator.stop();
     }
 }
-
 
 class Rocket extends ImageView {
 
@@ -106,4 +115,3 @@ class Rocket extends ImageView {
         rocketmotion.play();
     }
 }
-
